@@ -3,6 +3,7 @@ package com.keyin;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -14,7 +15,7 @@ public class MemberService {
     @PersistenceContext
     private EntityManager entityManager;
 
-    // Add a new member
+    @Transactional
     public Member addMember(Member member) {
         entityManager.persist(member);
         return member;
