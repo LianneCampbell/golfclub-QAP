@@ -1,5 +1,7 @@
 package com.keyin;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
@@ -20,7 +22,11 @@ public class Member {
     private int durationInMonths; // Membership duration
 
     @ManyToMany(mappedBy = "members")
+    @JsonIgnore
     private Set<Tournament> tournaments = new HashSet<>();
+
+    public Member() {
+    }
 
     public Member(Long id, String name, String address, String phoneNumber, String email, LocalDate startDate, int durationInMonths, Set<Tournament> tournaments) {
         this.id = id;
