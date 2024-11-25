@@ -20,6 +20,7 @@ public class Member {
     private String phoneNumber;
     private LocalDate startDate;
     private int durationInMonths; // Membership duration
+    private String membershipType;
 
     @ManyToMany(mappedBy = "members")
     @JsonIgnore
@@ -37,6 +38,7 @@ public class Member {
         this.startDate = startDate;
         this.durationInMonths = durationInMonths;
         this.tournaments = tournaments;
+        this.membershipType = getMembershipType();
     }
 
     public Long getId() {
@@ -101,6 +103,14 @@ public class Member {
 
     public void setTournaments(Set<Tournament> tournaments) {
         this.tournaments = tournaments;
+    }
+
+    public String getMembershipType() {
+        return membershipType;
+    }
+
+    public void setMembershipType(String membershipType) {
+        this.membershipType = membershipType;
     }
 // Getters, Setters, and Constructors
 }

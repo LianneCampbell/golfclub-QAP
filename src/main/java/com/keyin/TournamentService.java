@@ -47,7 +47,7 @@ public class TournamentService {
     // Search tournaments by location, start date, or find all members in a tournament
     public List<Tournament> searchTournaments(String location, LocalDate startDate) {
         String jpql = "SELECT t FROM Tournament t WHERE " +
-                "(:location IS NULL OR LOWER(t.location) LIKE LOWER(CONCAT('%', :location, '%'))) AND " +
+                "(:location IS NULL OR LOWER(t.location) LIKE LOWER(CONCAT('%', TRIM(:location), '%'))) AND " +
                 "(:startDate IS NULL OR t.startDate = :startDate)";
 
         TypedQuery<Tournament> query = entityManager.createQuery(jpql, Tournament.class);
