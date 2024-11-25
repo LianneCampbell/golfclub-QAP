@@ -22,11 +22,13 @@ public class TournamentController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Tournament> getTournament(@PathVariable Long id) {
+        System.out.println("Fetching tournament with ID: " + id);
         return ResponseEntity.ok(tournamentService.getTournamentById(id));
     }
 
     @GetMapping("/{id}/members")
     public ResponseEntity<Set<Member>> getTournamentMembers(@PathVariable Long id) {
+        System.out.println("Fetching members for tournament with ID: " + id);
         return ResponseEntity.ok(tournamentService.getTournamentMembers(id));
     }
 
