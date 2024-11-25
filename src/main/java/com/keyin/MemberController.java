@@ -28,18 +28,26 @@ public class MemberController {
     @GetMapping("/search")
     public ResponseEntity<List<Member>> searchMembers(
             @RequestParam(required = false) String name,
+            @RequestParam(required = false) String membershipType,
             @RequestParam(required = false) String phoneNumber,
             @RequestParam(required = false) LocalDate tournamentStartDate
     ) {
-        // Filter members using the service layer
-        List<Member> allMembers = memberService.getAllMembers();
-        List<Member> filteredMembers = allMembers.stream()
-                .filter(m -> name == null || m.getName().toLowerCase().contains(name.toLowerCase()))
-                .filter(m -> phoneNumber == null || m.getPhoneNumber().contains(phoneNumber))
-                .filter(m -> tournamentStartDate == null || m.getTournaments().stream()
-                        .anyMatch(t -> t.getStartDate().isEqual(tournamentStartDate)))
-                .collect(Collectors.toList());
+        // Log parameters to debug
+        System.out.println("Name: " + name);
+        System.out.println("Membership Type: " + membershipType);
+        System.out.println("Phone Number: " + phoneNumber);
+        System.out.println("Tournament Start Date: " + tournamentStartDate);
 
+        List<Member> filteredMembers = memberService.searchMembers(name, membershipType, phoneNumber, tournamentStartDate);
         return ResponseEntity.ok(filteredMembers);
     }
+
+    @PutMapping("/{id}/membershipType")
+    public ResponseEntity<Member> updateMembershipType(
+            @PathVariable Long id,
+            @RequestParam String membershipType) {
+        Member updatedMember = memberService.updateMembershipType(id, membershipType);
+        return ResponseEntity.ok(updatedMember);
+    }
+
 }

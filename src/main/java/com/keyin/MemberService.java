@@ -33,17 +33,34 @@ public class MemberService {
         return query.getResultList();
     }
 
-    // Search for members
-    public List<Member> searchMembers(String name, String phoneNumber, LocalDate tournamentStartDate) {
+    @Transactional
+    public Member updateMembershipType(Long id, String membershipType) {
+        Member member = entityManager.find(Member.class, id);
+        if (member == null) {
+            throw new IllegalArgumentException("Member not found with ID: " + id);
+        }
+        member.setMembershipType(membershipType);
+        return member;
+    }
+
+    public List<Member> searchMembers(String name, String membershipType, String phoneNumber, LocalDate tournamentStartDate) {
+        System.out.println("Searching with params: ");
+        System.out.println("Name: " + name);
+        System.out.println("Phone Number: " + phoneNumber);
+        System.out.println("Membership Type: " + membershipType);
+        System.out.println("Tournament Start Date: " + tournamentStartDate);
+
         String jpql = "SELECT m FROM Member m WHERE " +
                 "(:name IS NULL OR LOWER(m.name) LIKE LOWER(CONCAT('%', :name, '%'))) AND " +
-                "(:phoneNumber IS NULL OR m.phoneNumber LIKE CONCAT('%', :phoneNumber, '%')) AND " +
+                "(:phoneNumber IS NULL OR LOWER(m.phoneNumber) LIKE LOWER(CONCAT('%', :phoneNumber, '%'))) AND " +
+                "(:membershipType IS NULL OR LOWER(m.membershipType) LIKE LOWER(CONCAT('%', :membershipType, '%'))) AND " +
                 "(:tournamentStartDate IS NULL OR EXISTS " +
                 "(SELECT t FROM Tournament t JOIN t.members tm WHERE tm.id = m.id AND t.startDate = :tournamentStartDate))";
 
         TypedQuery<Member> query = entityManager.createQuery(jpql, Member.class);
         query.setParameter("name", name);
         query.setParameter("phoneNumber", phoneNumber);
+        query.setParameter("membershipType", membershipType);
         query.setParameter("tournamentStartDate", tournamentStartDate);
 
         return query.getResultList();
